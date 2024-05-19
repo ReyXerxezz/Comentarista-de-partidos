@@ -28,8 +28,9 @@ def listen():
             # recognize_bing()
             # recognize_google_cloud()
             # recognize_ibm()
-
+            print("1")
             said = r.recognize_google(audio, language='es-ES')
+            print(said)
         except Exception as e:
             print("Exception: " + str(e))
 
