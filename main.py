@@ -29,15 +29,6 @@ def preguntar_evento():
         assistant.speak("Entendido, seguimos.")
 
 def main():
-    assistant.speak("Campos")
-    lectura = assistant.listen()
-    print(lectura)
-    
-    if lectura.lower() == "es gay":
-        assistant.speak("Correcto")
-    else:
-        assistant.speak("Te has equivocado")
-    
     # Programar la pregunta sobre el partido cada minuto
     schedule.every(1).minutes.do(preguntar_evento)
     
