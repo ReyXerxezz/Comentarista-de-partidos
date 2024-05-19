@@ -1,5 +1,7 @@
 import assistant
 import time
+import schedule
+from partido import Partido
 
 # Almacenar el tiempo de inicio del partido
 tiempo_inicio = time.time()
@@ -11,16 +13,27 @@ def calcular_minuto():
     return minuto
 
 def main():
-    # Programar la pregunta sobre el partido cada minuto
-    schedule.every(1).minutes.do(preguntar_evento)
     
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-    global partido_terminado
-    partido_terminado = False
+    partido = Partido()
     
-    while not partido_terminado:
+    while not partido.partido_terminado:
+        minuto_actual = partido.calcular_minuto()
+        if minuto_actual >= 90 and partido.tiempo_extra == 0:
+            assistant.speak("Hemos llegado al minuto 90. ¿Se va a reponer tiempo?")
+            respuesta = assistant.listen()
+            if respuesta.lower() in ["sí", "si"]:
+                assistant.speak("¿Cuántos minutos se van a reponer?")
+                tiempo_extra = int(assistant.listen())
+                partido.tiempo_extra = tiempo_extra
+            else:
+                partido.terminar_partido()
+                break
+
+        if minuto_actual >= 90 + partido.tiempo_extra:
+            assistant.speak("El tiempo de reposición ha terminado. El partido ha terminado.")
+            partido.terminar_partido()
+            break
+        
         assistant.speak("¿Ha sucedido algo en el partido de fútbol?")
         respuesta = assistant.listen()
 
@@ -33,21 +46,20 @@ def main():
                 autor_gol = assistant.listen()
                 assistant.speak("¿Quién hizo la asistencia?")
                 asistente = assistant.listen()
-                minuto_gol = calcular_minuto()
-                assistant.speak(f"Gol de {autor_gol} con asistencia de {asistente} en el minuto {minuto_gol}.")
+                partido.marcar_gol(autor_gol, asistente)  # Llamas al método marcar_gol() de la clase Partido
 
             elif event.lower() == "falta":
                 assistant.speak("¿De quién fue la falta?")
                 autor_falta = assistant.listen()
                 assistant.speak("¿Sobre quién fue la falta?")
                 victima_falta = assistant.listen()
-                minuto_falta = calcular_minuto()
-                assistant.speak(f"Falta de {autor_falta} sobre {victima_falta} en el minuto {minuto_falta}.")
+                assistant.speak("¿Qué tarjeta se mostró?")
+                tarjeta = assistant.listen()
+                partido.cometer_falta(autor_falta, victima_falta, tarjeta)  # Llamas al método cometer_falta() de la clase Partido
 
             elif event.lower() == "partido terminado":
                 assistant.speak("Gracias por la información. El partido ha terminado.")
-                assistant.speak("El partido ha terminado.")
-                partido_terminado = True
+                partido.terminar_partido()  # Llamas al método terminar_partido() de la clase Partido
 
             else:
                 assistant.speak("Evento no reconocido.")
