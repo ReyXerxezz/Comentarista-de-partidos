@@ -28,7 +28,7 @@ def main():
                 assistant.speak("¿Quién hizo la asistencia?")
                 asistente = assistant.listen()
                 minuto_gol = calcular_minuto()
-                print(f"Gol de {autor_gol} con asistencia de {asistente} en el minuto {minuto_gol}.")
+                assistant.speak(f"Gol de {autor_gol} con asistencia de {asistente} en el minuto {minuto_gol}.")
 
             elif event.lower() == "falta":
                 assistant.speak("¿De quién fue la falta?")
@@ -36,11 +36,11 @@ def main():
                 assistant.speak("¿Sobre quién fue la falta?")
                 victima_falta = assistant.listen()
                 minuto_falta = calcular_minuto()
-                print(f"Falta de {autor_falta} sobre {victima_falta} en el minuto {minuto_falta}.")
+                assistant.speak(f"Falta de {autor_falta} sobre {victima_falta} en el minuto {minuto_falta}.")
 
             elif event.lower() == "partido terminado":
                 assistant.speak("Gracias por la información. El partido ha terminado.")
-                print("El partido ha terminado.")
+                assistant.speak("El partido ha terminado.")
                 partido_terminado = True
 
             else:
