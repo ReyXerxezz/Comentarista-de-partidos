@@ -36,25 +36,26 @@ def main():
         
         assistant.speak("¿Ha sucedido algo en el partido de fútbol?")
         respuesta = assistant.listen()
+        print({respuesta})
 
-        if respuesta.lower() in ["sí", "si"]:
+        if respuesta.lower() in ["sí", "si","¡sí!", ""]:
             assistant.speak("¿Qué ha sucedido?")
             event = assistant.listen()
 
             if event.lower() == "marcaron":
                 assistant.speak("¿De quién fue el gol?")
-                autor_gol = assistant.listen()
+                autor_gol = assistant.listen().lower()
                 assistant.speak("¿Quién hizo la asistencia?")
-                asistente = assistant.listen()
+                asistente = assistant.listen().lower()
                 partido.marcar_gol(autor_gol, asistente)  # Llamas al método marcar_gol() de la clase Partido
 
             elif event.lower() == "falta":
                 assistant.speak("¿De quién fue la falta?")
-                autor_falta = assistant.listen()
+                autor_falta = assistant.listen().lower()
                 assistant.speak("¿Sobre quién fue la falta?")
-                victima_falta = assistant.listen()
+                victima_falta = assistant.listen().lower()
                 assistant.speak("¿Qué tarjeta se mostró?")
-                tarjeta = assistant.listen()
+                tarjeta = assistant.listen().lower()
                 partido.cometer_falta(autor_falta, victima_falta, tarjeta)  # Llamas al método cometer_falta() de la clase Partido
 
             elif event.lower() == "partido terminado":
@@ -67,7 +68,7 @@ def main():
             assistant.speak("Entendido, seguimos.")
         
         # Esperar un tiempo antes de preguntar nuevamente
-        time.sleep(30)  # Espera de 30 segundos
+        time.sleep(10)  # Espera de 30 segundos
 
 if __name__ == '__main__':
     main()
