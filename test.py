@@ -1,5 +1,5 @@
 import assistant
-
+from unidecode import unidecode
 import mysql.connector
 from mysql.connector import errorcode
 
@@ -11,13 +11,9 @@ cursor = conn.cursor()
 
 def main():
     # Ejecutar una consulta simple
-    cursor.execute("SELECT * FROM jugador")
-    rows = cursor.fetchall()
-
-    # Imprimir los resultados
-    for row in rows:
-        print(row)
-
+    assistant.speak('Hello')
+    lectura = unidecode(assistant.listen())
+    print(lectura)
     # Cerrar la conexión
     conn.close()
 

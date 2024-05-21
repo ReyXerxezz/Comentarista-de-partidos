@@ -1,6 +1,6 @@
 import assistant
 import time
-import schedule
+from unidecode import unidecode
 from partido import Partido
 
 # Almacenar el tiempo de inicio del partido
@@ -14,7 +14,12 @@ def calcular_minuto():
 
 def main():
     
-    partido = Partido()
+    assistant.speak("¿Cuál es el club local?")
+    club_local = unidecode(assistant.listen().lower())
+    assistant.speak("¿Cuál es el club visitante?")
+    club_visitante = unidecode(assistant.listen().lower())
+    
+    partido = Partido(club_local, club_visitante)
     
     while not partido.partido_terminado:
         minuto_actual = partido.calcular_minuto()
@@ -60,6 +65,7 @@ def main():
 
             elif event.lower() == "partido terminado":
                 assistant.speak("Gracias por la información. El partido ha terminado.")
+                assistant.speak(f'El resultado del partido es, {club_local} {partido.goles_local} {club_visitante} {partido.goles_visitante}')
                 partido.terminar_partido()  # Llamas al método terminar_partido() de la clase Partido
 
             else:
