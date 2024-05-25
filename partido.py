@@ -3,6 +3,7 @@ import time
 import schedule
 import mysql.connector
 from mysql.connector import errorcode
+from prettytable import PrettyTable
 
 
 connection = mysql.connector.connect(user='admin_futbol', password='futbol123', host='localhost', port='33306', database='futbol')
@@ -63,7 +64,9 @@ class Partido:
         elif tarjeta == 'roja':
             cursor.execute(f"UPDATE jugador SET tarjetas_rojas = tarjetas_rojas + 1 WHERE documento = '{documento_autor_falta}'")
         connection.commit()
+        
 
+        
     def terminar_partido(self):
         self.partido_terminado = True
         cursor.execute(f"""
